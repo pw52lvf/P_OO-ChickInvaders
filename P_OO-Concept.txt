@@ -1,0 +1,16 @@
+    \\
+    (o>
+ \\_//)		( ,____, )
+  \_/_)		( //'	 )
+   _|_		( ~	 )
+
+Mon jeu consistera d'une poule qui lance des projectiles (potenciellement avec une arme) et qui ce déplace verticalement, à gauche de l'écran. La poule peut tirer les
+projectiles sur
+
+
+                       .-.
+        .-""`""-.    |(@ @)
+     _/`oOoOoOoOo`\_ \ \-/
+    '.-=-=-=-=-=-=-.' \/ \
+jgs   `-=.=-.-=.=-'    \ /\
+         ^  ^  ^       _H_ \
