@@ -14,13 +14,13 @@ namespace ChickInvaders
             int imgHeight1 = gameOver.Height;
 
             // Taille de l'image
-            int beetleWidth = 1000;
-            int beetleHeight = 500;
+            int perduWidth = 420;
+            int perduHeight = 298;
 
             int imgX = perduX;
             int imgY = perduY;
 
-            drawingSpace.Graphics.DrawImage(gameOver, new Rectangle(imgX, imgY, beetleWidth, beetleHeight));
+            drawingSpace.Graphics.DrawImage(gameOver, new Rectangle(imgX, imgY, perduWidth, perduHeight));
             //drawingSpace.Graphics.DrawImage(foeImage2, new Rectangle(imgX, imgY, foeSize, foeHeight));
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x + imgWidth / 2 + 5, _y - imgHeight / 2);
             //drawingSpace.Graphics.DrawRectangle(Pens.Red, beetleHitbox);

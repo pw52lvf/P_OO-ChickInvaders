@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.IO;
+using System.Linq;
 
 namespace ChickInvaders
 {
@@ -23,6 +24,7 @@ namespace ChickInvaders
         private List<Eggs> eggs;
         private List<Coeur> coeurs;
         private List<Beetle> beets;
+        private List<Perdu> gameover;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -32,9 +34,11 @@ namespace ChickInvaders
         public bool removeEgg;
         public bool removeEgg2;
         public bool eggIsRemoved = true;
+        public bool noMoreFoes1Left;
+        public bool noMoreFoes2Left;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
-        public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs, List<Beetle> beets) : base()
+        public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs, List<Beetle> beets, List<Perdu> gameover) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -53,6 +57,7 @@ namespace ChickInvaders
             this.eggs = eggs;
             this.coeurs = coeurs;
             this.beets = beets;
+            this.gameover = gameover;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
@@ -102,6 +107,10 @@ namespace ChickInvaders
             foreach (Beetle beetle in beets)
             {
                 beetle.Render(airspace);
+            }
+            foreach (Perdu perdu in gameover)
+            {
+                perdu.Render(airspace);
             }
 
             airspace.Render();
@@ -169,8 +178,9 @@ namespace ChickInvaders
             foreach (Chick chick in coop)
             {
                 chick.Update(interval);
-                int randomC = GlobalHelpers.alea.Next(1, 200);
-                if (randomC == 2)
+                int randomB = GlobalHelpers.alea.Next(0, 200);
+                int randomC = GlobalHelpers.alea.Next(1, 500);
+                if (randomB == 1)
                 {
                     beets.Add(new Beetle(0, GlobalHelpers.alea.Next(200, 500)));
                 }
@@ -192,6 +202,10 @@ namespace ChickInvaders
                 if (randomX == 1)
                 {
                     projectiles.Add(new Projectile(foes.X + 40, foes.Y + 30));
+                }
+                if (foes.Count < 1)
+                {
+
                 }
             }
             foreach (Foes2 foes2 in ufo2)
@@ -218,9 +232,10 @@ namespace ChickInvaders
                     }
                     if (chick.vie == 0)
                     {
-                        Environment.Exit(0);
                         Console.WriteLine("Perdu !");
-                        return;
+                        coop.Remove(chick);
+                        gameover.Add(new Perdu(400, 150));
+                        break;
                     }
                 }
                 if (projectile.Y > 550)
@@ -295,8 +310,9 @@ namespace ChickInvaders
                     if (chick.chickHitbox.IntersectsWith(beetle.beetleHitbox))
                     {
                         Console.WriteLine("Vous êtes rentré en contact avec une bestiole, dommage !");
-                        Environment.Exit(0);
-                        return;
+                        coop.Remove(chick);
+                        gameover.Add(new Perdu(400, 150));
+                        break;
                     }
                 }
                 if (beetle.X >= 1200)
@@ -304,6 +320,10 @@ namespace ChickInvaders
                     beets.Remove(beetle);
                     break;
                 }
+            }
+            foreach (Perdu perdu in gameover)
+            {
+                perdu.UpdatePerdu(interval);
             }
         }
 
