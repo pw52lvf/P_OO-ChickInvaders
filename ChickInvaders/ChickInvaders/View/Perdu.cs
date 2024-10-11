@@ -3,50 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
-namespace ChickInvaders.View
+namespace ChickInvaders
 {
     public partial class Perdu
     {
         public int perduX;
         public int perduY;
-        private List<Image> images = new List<Image>();
         private Image gameOver;
-        private int beetleWidth;
-        private int beetleHeight;
+        public Rectangle perduHitbox { get; private set; }
+        private int perduWidth;
+        private int perduHeight;
 
         // Constructeur
-        public Beetle(int x, int y)
+        public Perdu(int x, int y)
         {
-            bx = x;
-            by = y;
-            speedB = GlobalHelpers.alea.Next(1, 3);
-            beetleImage = Image.FromFile("beetle.png");
-            beetleWidth = 100;
-            beetleHeight = 60;
+            perduX = x;
+            perduY = y;
+            perduWidth = 100;
+            perduHeight = 60;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\gameover.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            gameOver = Image.FromFile(imagePath);
         }
-        public int X { get { return bx; } }
-        public int Y { get { return by; } }
+        public int X { get { return perduX; } }
+        public int Y { get { return perduY; } }
 
         private void UpdateHitbox()
         {
-            beetleHitbox = new Rectangle(bx, by + 22, beetleWidth, beetleHeight);
+            perduHitbox = new Rectangle(perduX, perduY + 22, perduWidth, perduHeight);
         }
 
         // Cette méthode calcule le nouvel état dans lequel le drone se trouve après
         // que 'interval' millisecondes se sont écoulées
-        public void UpdateB(int interval)
+        public void UpdatePerdu(int interval)
         {
-            if (bx < 1250)
-            {
-                bx += speedB;
-                bx++;
-            }
-            else
-            {
-                speedB = GlobalHelpers.alea.Next(1, 3);
-                by = GlobalHelpers.alea.Next(150, 500);
-            }
             UpdateHitbox();
         }
     }

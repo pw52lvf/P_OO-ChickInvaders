@@ -2,6 +2,7 @@ using ChickInvaders;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms.VisualStyles;
 using System.Xml;
+using System.IO;
 
 namespace ChickInvaders
 {
@@ -51,13 +52,18 @@ namespace ChickInvaders
             this.projectiles = projectiles;
             this.eggs = eggs;
             this.coeurs = coeurs;
-            SetBackgroundImage("background.png");
             this.beets = beets;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            SetBackgroundImage(imagePath);
         }
 
         public void SetBackgroundImage(string filePath)
         {
-            background = Image.FromFile("background.png");
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            background = Image.FromFile(imagePath);
             BackgroundImage = background;
             //this.Invalidate();
         }
@@ -288,7 +294,7 @@ namespace ChickInvaders
                 {
                     if (chick.chickHitbox.IntersectsWith(beetle.beetleHitbox))
                     {
-                        Console.WriteLine("Perdu !");
+                        Console.WriteLine("Vous êtes rentré en contact avec une bestiole, dommage !");
                         Environment.Exit(0);
                         return;
                     }

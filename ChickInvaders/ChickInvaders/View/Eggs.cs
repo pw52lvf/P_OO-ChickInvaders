@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ChickInvaders
 {
@@ -21,9 +22,12 @@ namespace ChickInvaders
             ex = x;
             ey = y;
             //_charge = GlobalHelpers.alea.Next(FULLCHARGE); // La charge initiale de la batterie est choisie aléatoirement
-            eggImage = Image.FromFile("egg.png");
             eggWidth = 16;
             eggHeight = 16;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\egg.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            eggImage = Image.FromFile(imagePath);
         }
         public int X { get { return ex; } }
         public int Y { get { return ey; } }

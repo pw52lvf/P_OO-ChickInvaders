@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ChickInvaders
 {
@@ -10,7 +11,6 @@ namespace ChickInvaders
     {
         private int bx;                                 // Position en X depuis la gauche de l'espace aérien
         private int by;
-        private List<Image> images = new List<Image>();
         private Image beetleImage;
         private int speedB;
         public Rectangle beetleHitbox { get; private set; }
@@ -23,9 +23,12 @@ namespace ChickInvaders
             bx = x;
             by = y;
             speedB = GlobalHelpers.alea.Next(1, 3);
-            beetleImage = Image.FromFile("beetle.png");
             beetleWidth = 100;
             beetleHeight= 60;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\beetle.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            beetleImage = Image.FromFile(imagePath);
         }
         public int X { get { return bx; } }
         public int Y { get { return by; } }

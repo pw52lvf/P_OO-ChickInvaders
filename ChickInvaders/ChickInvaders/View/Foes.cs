@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ChickInvaders
 {
@@ -28,9 +29,12 @@ namespace ChickInvaders
             _name = name;
             speedF = GlobalHelpers.alea.Next(1, 8);
             _charge = FULLCHARGE;
-            foeImage1 = Image.FromFile("foe1.png");
             foeWidth1 = 50;
             foeHeight1 = 35;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\foe1.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            foeImage1 = Image.FromFile(imagePath);
         }
         public int X { get { return fx; } }
         public int Y { get { return fy; } }

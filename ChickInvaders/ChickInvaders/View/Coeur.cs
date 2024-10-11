@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ChickInvaders
 {
@@ -21,9 +22,11 @@ namespace ChickInvaders
         {
             cx = x;
             cy = y;
-            coeurImage = Image.FromFile("coeur.png");
             coeurWidth = 26;
             coeurHeight = 26;
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\coeur.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            coeurImage = Image.FromFile(imagePath);
         }
         public int X { get { return cx; } }
         public int Y { get { return cy; } }

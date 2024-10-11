@@ -1,4 +1,6 @@
-﻿namespace ChickInvaders
+﻿using System.IO;
+
+namespace ChickInvaders
 {
     // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public partial class Chick
@@ -23,9 +25,12 @@
             _y = y;
             _name = name;
             vie = vieMax;
-            chickImage = Image.FromFile("chick.png");
             chickWidth = 50;
             chickHeight = 50;
+
+            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\chick.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+            chickImage = Image.FromFile(imagePath);
         }
         public int X { get { return _x; } }
         public int Y { get { return _y; } }
