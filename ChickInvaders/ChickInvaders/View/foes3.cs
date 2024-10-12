@@ -1,20 +1,18 @@
-﻿using ChickInvaders.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ChickInvaders
 {
-    public partial class Foes
+    public partial class Foes3
     {
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
-            int imgWidth1 = foeImage1.Width;
-            int imgHeight1 = foeImage1.Height;
+            int imgWidth3 = foeImage3.Width;
+            int imgHeight3 = foeImage3.Height;
 
             // Taille de l'image
             int foeSize = 100;
@@ -23,7 +21,7 @@ namespace ChickInvaders
             int imgX = fx;
             int imgY = fy;
 
-            drawingSpace.Graphics.DrawImage(foeImage1, new Rectangle(imgX, imgY, foeSize, foeHeight));
+            drawingSpace.Graphics.DrawImage(foeImage3, new Rectangle(imgX, imgY, foeSize, foeHeight));
             //drawingSpace.Graphics.DrawImage(foeImage2, new Rectangle(imgX, imgY, foeSize, foeHeight));
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x + imgWidth / 2 + 5, _y - imgHeight / 2);
             //drawingSpace.Graphics.DrawRectangle(Pens.Red, foeHitbox1);

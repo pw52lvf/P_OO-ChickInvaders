@@ -26,6 +26,8 @@ namespace ChickInvaders
         private List<Beetle> beets;
         private List<Perdu> gameover;
         private List<Winner> winner;
+        private List<Foes3> ufo3;
+        private List<Round2> rounds;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -40,7 +42,7 @@ namespace ChickInvaders
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
-            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner) : base()
+            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -61,6 +63,8 @@ namespace ChickInvaders
             this.beets = beets;
             this.gameover = gameover;
             this.winner = winner;
+            this.ufo3 = ufo3;
+            this.rounds = rounds;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
@@ -119,7 +123,14 @@ namespace ChickInvaders
             {
                 winners.Render(airspace);
             }
-
+            foreach (Foes3 foes3 in ufo3)
+            {
+                foes3.Render(airspace);
+            }
+            foreach (Round2 round2 in rounds)
+            {
+                round2.Render(airspace);
+            }
             airspace.Render();
         }
 
@@ -152,6 +163,20 @@ namespace ChickInvaders
                         break;
                     case Keys.Escape:
                         Environment.Exit(0);
+                        break;
+                    case Keys.D1:
+                        foreach (Foes foes in ufo)
+                        {
+                            ufo.Clear();
+                            break;
+                        }
+                        break;
+                    case Keys.D2:
+                        foreach (Foes2 foes2 in ufo2)
+                        {
+                            ufo2.Clear();
+                            break;
+                        }
                         break;
                 }
             }
@@ -213,15 +238,8 @@ namespace ChickInvaders
                 {
                     projectiles.Add(new Projectile(foes.X + 40, foes.Y + 30));
                 }
-                if (ufo.Count() < 1)
-                {
-                    winner.Add(new Winner(400, 150));
-                    foreach (Beetle beetle in beets)
-                    {
-                        beets.Remove(beetle);
-                    }
-                }
             }
+
             foreach (Foes2 foes2 in ufo2)
             {
                 foes2.UpdateF2(interval);
@@ -231,19 +249,16 @@ namespace ChickInvaders
                 {
                     projectiles.Add(new Projectile(foes2.X + 20, foes2.Y + 30));
                 }
-                if (ufo2.Count() < 1)
-                {
-                    winner.Add(new Winner(400, 150));
-                    foreach (Beetle beetle in beets)
-                    {
-                        beets.Remove(beetle);
-                    }
-                }
+            }
+
+            foreach (Foes3 foes3 in ufo3)
+            {
+                foes3.UpdateF3(interval);
             }
 
             if (ufo.Count < 1 && ufo2.Count < 1 && winner.Count == 0)
             {
-                winner.Add(new Winner(400, 150));
+                rounds.Add(new Round2(400, 150));
                 beets.Clear();
             }
 
@@ -308,6 +323,19 @@ namespace ChickInvaders
                     }
                     removeEgg = false;
                 }
+                foreach (Beetle beetle in beets)
+                {
+                    if (beetle.beetleHitbox.IntersectsWith(egg.eggHitbox))
+                    {
+                        removeEgg = true;
+                        break;
+                    }
+                    if (removeEgg)
+                    {
+                        eggs.Remove(egg);
+                    }
+                    removeEgg = false;
+                }
                 if (egg.Y <= 0)
                 {
                     eggs.Remove(egg);
@@ -360,6 +388,10 @@ namespace ChickInvaders
             foreach (Winner winners in winner)
             {
                 winners.UpdateWinner(interval);
+            }
+            foreach (Round2 round2 in rounds)
+            {
+                round2.UpdateRound2(interval);
             }
         }
 

@@ -41,7 +41,7 @@ namespace ChickInvaders
         // que 'interval' millisecondes se sont écoulées
         public void UpdateP(int interval)
         {
-            py = py + 5;
+            py = py + 10;
             py++;
 
             UpdateHitbox();
