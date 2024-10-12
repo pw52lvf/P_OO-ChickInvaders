@@ -20,6 +20,7 @@ namespace ChickInvaders
             List<Coeur> coeurs = new List<Coeur>();
             List<Beetle> beets = new List<Beetle>();
             List<Perdu> gameover = new List<Perdu>();
+            List<Winner> winners = new List<Winner>();
             coop.Add(new Chick(Land.WIDTH / 2, Land.HEIGHT / 2, "Chick"));
 
             ufo.Add(new Foes(1200, 0, "Sajad"));
@@ -37,7 +38,7 @@ namespace ChickInvaders
             //gameover.Add(new Perdu(400, 150));
 
             // Démarrage
-            Application.Run(new Land(coop, ufo, ufo2, projectiles, eggs, coeurs, beets, gameover));
+            Application.Run(new Land(coop, ufo, ufo2, projectiles, eggs, coeurs, beets, gameover, winners));
         }
     }
 }

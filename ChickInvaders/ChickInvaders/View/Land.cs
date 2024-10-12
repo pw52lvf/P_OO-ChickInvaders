@@ -25,6 +25,7 @@ namespace ChickInvaders
         private List<Coeur> coeurs;
         private List<Beetle> beets;
         private List<Perdu> gameover;
+        private List<Winner> winner;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -38,7 +39,8 @@ namespace ChickInvaders
         public bool noMoreFoes2Left;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
-        public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs, List<Beetle> beets, List<Perdu> gameover) : base()
+        public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
+            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -58,6 +60,7 @@ namespace ChickInvaders
             this.coeurs = coeurs;
             this.beets = beets;
             this.gameover = gameover;
+            this.winner = winner;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
@@ -111,6 +114,10 @@ namespace ChickInvaders
             foreach (Perdu perdu in gameover)
             {
                 perdu.Render(airspace);
+            }
+            foreach (Winner winners in winner)
+            {
+                winners.Render(airspace);
             }
 
             airspace.Render();
@@ -180,9 +187,12 @@ namespace ChickInvaders
                 chick.Update(interval);
                 int randomB = GlobalHelpers.alea.Next(0, 200);
                 int randomC = GlobalHelpers.alea.Next(1, 500);
-                if (randomB == 1)
+                if (winner.Count == 0)
                 {
-                    beets.Add(new Beetle(0, GlobalHelpers.alea.Next(200, 500)));
+                    if (randomB == 1)
+                    {
+                        beets.Add(new Beetle(0, GlobalHelpers.alea.Next(200, 500)));
+                    }
                 }
                 if (eggIsRemoved)
                 {
@@ -203,9 +213,13 @@ namespace ChickInvaders
                 {
                     projectiles.Add(new Projectile(foes.X + 40, foes.Y + 30));
                 }
-                if (foes.Count < 1)
+                if (ufo.Count() < 1)
                 {
-
+                    winner.Add(new Winner(400, 150));
+                    foreach (Beetle beetle in beets)
+                    {
+                        beets.Remove(beetle);
+                    }
                 }
             }
             foreach (Foes2 foes2 in ufo2)
@@ -217,7 +231,22 @@ namespace ChickInvaders
                 {
                     projectiles.Add(new Projectile(foes2.X + 20, foes2.Y + 30));
                 }
+                if (ufo2.Count() < 1)
+                {
+                    winner.Add(new Winner(400, 150));
+                    foreach (Beetle beetle in beets)
+                    {
+                        beets.Remove(beetle);
+                    }
+                }
             }
+
+            if (ufo.Count < 1 && ufo2.Count < 1 && winner.Count == 0)
+            {
+                winner.Add(new Winner(400, 150));
+                beets.Clear();
+            }
+
             foreach (Projectile projectile in projectiles)
             {
                 projectile.UpdateP(interval);
@@ -294,7 +323,10 @@ namespace ChickInvaders
                     if (chick.chickHitbox.IntersectsWith(coeur.coeurHitbox))
                     {
                         eggIsRemoved = true;
-                        chick.vie++;
+                        if (chick.vie > 3)
+                        {
+                            chick.vie++;
+                        }
                         Console.WriteLine(chick.vie);
                         coeurs.Remove(coeur);
                         break;
@@ -324,6 +356,10 @@ namespace ChickInvaders
             foreach (Perdu perdu in gameover)
             {
                 perdu.UpdatePerdu(interval);
+            }
+            foreach (Winner winners in winner)
+            {
+                winners.UpdateWinner(interval);
             }
         }
 
