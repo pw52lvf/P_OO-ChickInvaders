@@ -48,7 +48,7 @@ namespace ChickInvaders
         // que 'interval' millisecondes se sont écoulées
         public void UpdateF3(int interval)
         {
-            if (fx < 1100)
+            if (fx < 1200)
             {
                 fx += speedF;
                 fx++;

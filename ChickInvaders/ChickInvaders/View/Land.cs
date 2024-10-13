@@ -45,6 +45,7 @@ namespace ChickInvaders
         public bool eggDown;
         public bool eggRight;
         public bool eggLeft;
+        public bool chickIsFlipped = false;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
@@ -155,10 +156,12 @@ namespace ChickInvaders
                         break;
                     case Keys.D:
                         chick.GoRight(5);
+                        chickIsFlipped = false;
                         break;
                     case Keys.A:
                         chick.GoLeft(5);
-                        break;s
+                        chickIsFlipped = true;
+                        break;
                     case Keys.Escape:
                         Environment.Exit(0);
                         break;
@@ -274,6 +277,9 @@ namespace ChickInvaders
         {
             foreach (Chick chick in coop)
             {
+                string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+                string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\chick.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+                string imagePathFlipped = Path.Combine(projectRoot, @"..\..\..\Images\chick-flipped.png");
                 chick.Update(interval);
                 int randomB = GlobalHelpers.alea.Next(0, 200);
                 int randomC = GlobalHelpers.alea.Next(1, 500);
@@ -291,6 +297,14 @@ namespace ChickInvaders
                         coeurs.Add(new Coeur(GlobalHelpers.alea.Next(20, 1180), GlobalHelpers.alea.Next(200, 535)));
                         heartIsRemoved = false;
                     }
+                }
+                if (chickIsFlipped)
+                {
+                    chick.chickImage = Image.FromFile(imagePathFlipped);
+                }
+                else
+                {
+                    chick.chickImage = Image.FromFile(imagePath);
                 }
             }
             List<Projectile> projectilesToRemove = new List<Projectile>();
@@ -485,8 +499,10 @@ namespace ChickInvaders
 
             if (_nextRound == true)
             {
-                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Mairlaim"));
-                
+                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Donny"));
+                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Christ"));
+                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Jonny"));
+
                 _nextRound = false;
             }
         }

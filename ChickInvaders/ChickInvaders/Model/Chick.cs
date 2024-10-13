@@ -10,7 +10,7 @@ namespace ChickInvaders
         private string _name;                           // Un nom
         private int _x;                                 // Position en X depuis la gauche de l'espace aérien
         private int _y;                                 // Position en Y depuis le haut de l'espace aérien
-        private Image chickImage;
+        public Image chickImage;
         private int _speedX = 0;
         private int _speedY = 0;
         public bool isFacingLeft;
@@ -27,10 +27,6 @@ namespace ChickInvaders
             vie = vieMax;
             chickWidth = 50;
             chickHeight = 50;
-
-            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
-            string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\chick.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
-            chickImage = Image.FromFile(imagePath);
         }
         public int X { get { return _x; } }
         public int Y { get { return _y; } }
