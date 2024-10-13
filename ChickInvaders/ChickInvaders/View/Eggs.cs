@@ -39,9 +39,27 @@ namespace ChickInvaders
 
         // Cette méthode calcule le nouvel état dans lequel le drone se trouve après
         // que 'interval' millisecondes se sont écoulées
-        public void UpdateE(int interval)
+        public void UpdateEU(int interval)
         {
             ey = ey - 8;
+
+            UpdateHitbox();
+        }
+        public void UpdateED(int interval)
+        {
+            ey = ey + 8;
+
+            UpdateHitbox();
+        }
+        public void UpdateER(int interval)
+        {
+            ex = ex + 8;
+
+            UpdateHitbox();
+        }
+        public void UpdateEL(int interval)
+        {
+            ex = ex - 8;
 
             UpdateHitbox();
         }

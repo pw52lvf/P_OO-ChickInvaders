@@ -36,9 +36,15 @@ namespace ChickInvaders
 
         public bool removeEgg;
         public bool removeEgg2;
-        public bool eggIsRemoved = true;
+        public bool heartIsRemoved = true;
         public bool noMoreFoes1Left;
         public bool noMoreFoes2Left;
+        public bool round2Finished = false;
+        public bool _nextRound;
+        public bool eggUp;
+        public bool eggDown;
+        public bool eggRight;
+        public bool eggLeft;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
@@ -49,6 +55,7 @@ namespace ChickInvaders
             // Gets a reference to the current BufferedGraphicsContext
             this.KeyPreview = true;
             this.KeyDown += new KeyEventHandler(Move);
+            this.KeyUp += new KeyEventHandler(NextRound);
             this.KeyUp += new KeyEventHandler(StopMove);
             currentContext = BufferedGraphicsManager.Current;
             // Creates a BufferedGraphics instance associated with this form, and with
@@ -151,16 +158,7 @@ namespace ChickInvaders
                         break;
                     case Keys.A:
                         chick.GoLeft(5);
-                        break;
-                    case Keys.Space:
-                        if (eggs.Count == 0)
-                        {
-                            foreach (Chick c in coop)
-                            {
-                                eggs.Add(new Eggs(c.X, c.Y));
-                            }
-                        }
-                        break;
+                        break;s
                     case Keys.Escape:
                         Environment.Exit(0);
                         break;
@@ -176,6 +174,58 @@ namespace ChickInvaders
                         {
                             ufo2.Clear();
                             break;
+                        }
+                        break;
+                    case Keys.Up:
+                        if (eggs.Count == 0)
+                        {
+                            foreach (Chick c in coop)
+                            {
+                                if (eggs.Count == 0)
+                                {
+                                    eggs.Add(new Eggs(c.X, c.Y));
+                                    eggUp = true;
+                                }
+                            }
+                        }
+                        break;
+                    case Keys.Down:
+                        if (eggs.Count == 0)
+                        {
+                            foreach (Chick c in coop)
+                            {
+                                if (eggs.Count == 0)
+                                {
+                                    eggs.Add(new Eggs(c.X, c.Y));
+                                    eggDown = true;
+                                }
+                            }
+                        }
+                        break;
+                    case Keys.Left:
+                        if (eggs.Count == 0)
+                        {
+                            foreach (Chick c in coop)
+                            {
+                                if (eggs.Count == 0)
+                                {
+                                    eggs.Add(new Eggs(c.X, c.Y));
+                                    eggLeft = true;
+                                }
+                            }
+                        }
+                        break;
+                    case Keys.Right:
+                        if (eggs.Count == 0)
+                        {
+                            foreach (Chick c in coop)
+                            {
+                                if (eggs.Count == 0)
+                                {
+                                    eggs.Add(new Eggs(c.X, c.Y));
+                                    eggRight = true;
+                                }
+                            }
                         }
                         break;
                 }
@@ -204,6 +254,21 @@ namespace ChickInvaders
             }
         }
 
+        public void NextRound(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            foreach (Round2 round2 in rounds)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Enter:
+                        rounds.Remove(round2);
+                        _nextRound = true;
+                        break;
+                }
+                break;
+            }
+        }
+
         // Calcul du nouvel état après que 'interval' millisecondes se sont écoulées
         private void Update(int interval)
         {
@@ -212,19 +277,19 @@ namespace ChickInvaders
                 chick.Update(interval);
                 int randomB = GlobalHelpers.alea.Next(0, 200);
                 int randomC = GlobalHelpers.alea.Next(1, 500);
-                if (winner.Count == 0)
+                if (round2Finished == false)
                 {
                     if (randomB == 1)
                     {
                         beets.Add(new Beetle(0, GlobalHelpers.alea.Next(200, 500)));
                     }
                 }
-                if (eggIsRemoved)
+                if (heartIsRemoved)
                 {
                     if (randomC == 1)
                     {
                         coeurs.Add(new Coeur(GlobalHelpers.alea.Next(20, 1180), GlobalHelpers.alea.Next(200, 535)));
-                        eggIsRemoved = false;
+                        heartIsRemoved = false;
                     }
                 }
             }
@@ -254,12 +319,6 @@ namespace ChickInvaders
             foreach (Foes3 foes3 in ufo3)
             {
                 foes3.UpdateF3(interval);
-            }
-
-            if (ufo.Count < 1 && ufo2.Count < 1 && winner.Count == 0)
-            {
-                rounds.Add(new Round2(400, 150));
-                beets.Clear();
             }
 
             foreach (Projectile projectile in projectiles)
@@ -294,7 +353,22 @@ namespace ChickInvaders
             }
             foreach (Eggs egg in eggs)
             {
-                egg.UpdateE(interval);
+                if (eggUp)
+                {
+                    egg.UpdateEU(interval);
+                }
+                if (eggDown)
+                {
+                    egg.UpdateED(interval);
+                }
+                if (eggRight)
+                {
+                    egg.UpdateER(interval);
+                }
+                if (eggLeft)
+                {
+                    egg.UpdateEL(interval);
+                }
                 foreach (Foes foes in ufo)
                 {
                     if (foes.foeHitbox1.IntersectsWith(egg.eggHitbox))
@@ -336,9 +410,13 @@ namespace ChickInvaders
                     }
                     removeEgg = false;
                 }
-                if (egg.Y <= 0)
+                if (egg.Y <= 0 || egg.X <= 0 || egg.X >= 1200 || egg.Y >= 600)
                 {
                     eggs.Remove(egg);
+                    eggUp = false;
+                    eggDown = false;
+                    eggRight = false;
+                    eggLeft = false;
                     break;
                 }
                 break;
@@ -350,7 +428,7 @@ namespace ChickInvaders
                 {
                     if (chick.chickHitbox.IntersectsWith(coeur.coeurHitbox))
                     {
-                        eggIsRemoved = true;
+                        heartIsRemoved = true;
                         if (chick.vie > 3)
                         {
                             chick.vie++;
@@ -392,6 +470,24 @@ namespace ChickInvaders
             foreach (Round2 round2 in rounds)
             {
                 round2.UpdateRound2(interval);
+            }
+
+            if (ufo.Count < 1 && ufo2.Count < 1 && winner.Count == 0)
+            {
+                if (round2Finished == false)
+                {
+                    Console.WriteLine("Vous avez atteint le deuxième round ! Faites Enter pour passer au prochain round.");
+                    rounds.Add(new Round2(400, 150));
+                    beets.Clear();
+                    round2Finished = true;
+                }
+            }
+
+            if (_nextRound == true)
+            {
+                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Mairlaim"));
+                
+                _nextRound = false;
             }
         }
 

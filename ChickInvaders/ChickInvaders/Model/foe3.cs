@@ -26,7 +26,7 @@ namespace ChickInvaders
             fx = x;
             fy = y;
             _name = name;
-            speedF = GlobalHelpers.alea.Next(1, 8);
+            speedF = GlobalHelpers.alea.Next(8, 12);
             _charge = FULLCHARGE;
             foeWidth3 = 50;
             foeHeight3 = 35;
@@ -52,12 +52,12 @@ namespace ChickInvaders
             {
                 fx += speedF;
                 fx++;
-                fy += GlobalHelpers.alea.Next(-5, 5);
+                //fy += GlobalHelpers.alea.Next(-5, 5);
             }
             else
             {
                 fx = 0;
-                speedF = GlobalHelpers.alea.Next(1, 8);
+                speedF = GlobalHelpers.alea.Next(8, 12);
                 fy = GlobalHelpers.alea.Next(1, 150);
             }
             UpdateHitbox();

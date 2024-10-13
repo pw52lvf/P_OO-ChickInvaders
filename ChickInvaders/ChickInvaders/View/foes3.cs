@@ -15,8 +15,8 @@ namespace ChickInvaders
             int imgHeight3 = foeImage3.Height;
 
             // Taille de l'image
-            int foeSize = 100;
-            int foeHeight = 100;
+            int foeSize = 50;
+            int foeHeight = 50;
 
             int imgX = fx;
             int imgY = fy;
