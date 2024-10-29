@@ -65,7 +65,7 @@ namespace ChickInvaders
             else
             {
                 fx -= speedF;
-                fx++;
+                fx--;
                 speedF = GlobalHelpers.alea.Next(5, 8);
                 //fy = GlobalHelpers.alea.Next(1, 150);
                 

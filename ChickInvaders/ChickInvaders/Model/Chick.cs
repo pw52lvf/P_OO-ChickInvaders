@@ -8,8 +8,8 @@ namespace ChickInvaders
         public static readonly int vieMax = 3;          // Charge maximale de la batterie
         public int vie;                                // La charge actuelle de la batterie
         private string _name;                           // Un nom
-        private int _x;                                 // Position en X depuis la gauche de l'espace aérien
-        private int _y;                                 // Position en Y depuis le haut de l'espace aérien
+        public int _x;                                 // Position en X depuis la gauche de l'espace aérien
+        public int _y;                                 // Position en Y depuis le haut de l'espace aérien
         public Image chickImage;
         private int _speedX = 0;
         private int _speedY = 0;

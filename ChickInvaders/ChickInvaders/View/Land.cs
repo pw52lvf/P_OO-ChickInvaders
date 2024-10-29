@@ -28,6 +28,7 @@ namespace ChickInvaders
         private List<Winner> winner;
         private List<Foes3> ufo3;
         private List<Round2> rounds;
+        private List<Projectile2> projectiles2;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -46,10 +47,11 @@ namespace ChickInvaders
         public bool eggRight;
         public bool eggLeft;
         public bool chickIsFlipped = false;
+        public bool canRestart;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
-            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds) : base()
+            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds, List<Projectile2> projectiles2) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -73,6 +75,7 @@ namespace ChickInvaders
             this.winner = winner;
             this.ufo3 = ufo3;
             this.rounds = rounds;
+            this.projectiles2 = projectiles2;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
@@ -139,11 +142,37 @@ namespace ChickInvaders
             {
                 round2.Render(airspace);
             }
+            foreach (Projectile2 projectile2 in projectiles2)
+            {
+                projectile2.Render(airspace);
+            }
             airspace.Render();
         }
 
         public void Move(object sender, System.Windows.Forms.KeyEventArgs e)
         {
+            foreach (Perdu perdu in gameover)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Escape:
+                        Environment.Exit(0);
+                        break;
+                    case Keys.Return:
+                        if (canRestart)
+                        {
+                            foreach (Foes3 foes3 in ufo3)
+                            {
+                                foes3.foes3vie = 4;
+                            }
+                            coop.Add(new Chick(Land.WIDTH / 2, Land.HEIGHT / 2, "Chick"));
+                            gameover.Remove(perdu);
+                            canRestart = false;
+                        }
+                        break;
+                }
+                break;
+            }
             foreach (Chick chick in coop)
             {
                 switch (e.KeyCode)
@@ -176,6 +205,13 @@ namespace ChickInvaders
                         foreach (Foes2 foes2 in ufo2)
                         {
                             ufo2.Clear();
+                            break;
+                        }
+                        break;
+                    case Keys.D3:
+                        foreach (Foes3 foes3 in ufo3)
+                        {
+                            ufo3.Clear();
                             break;
                         }
                         break;
@@ -356,6 +392,14 @@ namespace ChickInvaders
                 else
                 {
                     foes3.foeImage3 = Image.FromFile(imagePath);
+                }
+
+                int randomX = GlobalHelpers.alea.Next(1, 50);
+                if (randomX == 1)
+                {
+                    projectiles2.Add(new Projectile2(foes3.X + 20, foes3.Y + 30, 1));
+                    projectiles2.Add(new Projectile2(foes3.X + 20, foes3.Y + 30, 2));
+                    projectiles2.Add(new Projectile2(foes3.X + 20, foes3.Y + 30, 3));
                 }
             }
 
@@ -540,14 +584,52 @@ namespace ChickInvaders
                     round2Finished = true;
                 }
             }
+            List<Projectile2> projectilesToRemove2 = new List<Projectile2>();
+            foreach (Projectile2 projectile2 in projectiles2)
+            {
+                projectile2.UpdateP2(interval);
+                foreach (Chick chick in coop)
+                {
+                    if (chick.chickHitbox.IntersectsWith(projectile2.projHitbox2))
+                    {
+                        chick.vie--;
+                        Console.WriteLine(chick.vie);
+                        projectilesToRemove2.Add(projectile2);
+                        break;
+                    }
+                    if (chick.vie < 1)
+                    {
+                        Console.WriteLine("Perdu !");
+                        coop.Remove(chick);
+                        gameover.Add(new Perdu(400, 150));
+                        break;
+                    }
+                }
+                if (projectile2.Y > 550)
+                {
+                    projectilesToRemove2.Add(projectile2);
+                    break;
+                }
+            }
+            foreach (Projectile2 projectile2 in projectilesToRemove2)
+            {
+                projectiles2.Remove(projectile2);
+            }
 
             if (_nextRound)
             {
                 ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Donny"));
-                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Christ"));
-                ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Jonny"));
+                ufo3.Add(new Foes3(100, GlobalHelpers.alea.Next(0, 150), "Christ"));
+                ufo3.Add(new Foes3(200, GlobalHelpers.alea.Next(0, 150), "Jonny"));
 
+                canRestart = true;
                 _nextRound = false;
+
+                if (ufo3.Count == 0)
+                {
+                    winner.Add(new Winner(400, 150));
+                    Console.WriteLine("Winner!!!");
+                }
             }
         }
 
