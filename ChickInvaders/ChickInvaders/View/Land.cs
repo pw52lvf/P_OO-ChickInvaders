@@ -333,6 +333,30 @@ namespace ChickInvaders
             foreach (Foes3 foes3 in ufo3)
             {
                 foes3.UpdateF3(interval);
+
+                string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
+                string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\foe3.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+                string imagePathDamaged = Path.Combine(projectRoot, @"..\..\..\Images\foe3damaged.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+                string imagePathDamagedA = Path.Combine(projectRoot, @"..\..\..\Images\foe3damagedA.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+                string imagePathDamagedB = Path.Combine(projectRoot, @"..\..\..\Images\foe3damagedB.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
+                foes3.foeImage3 = Image.FromFile(imagePath);
+
+                if (foes3.foes3vie == 3)
+                {
+                    foes3.foeImage3 = Image.FromFile(imagePathDamaged);
+                }
+                else if (foes3.foes3vie == 2)
+                {
+                    foes3.foeImage3 = Image.FromFile(imagePathDamagedA);
+                }
+                else if (foes3.foes3vie == 1)
+                {
+                    foes3.foeImage3 = Image.FromFile(imagePathDamagedB);
+                }
+                else
+                {
+                    foes3.foeImage3 = Image.FromFile(imagePath);
+                }
             }
 
             foreach (Projectile projectile in projectiles)
@@ -403,6 +427,26 @@ namespace ChickInvaders
                     {
                         removeEgg = true;
                         ufo2.Remove(foes2);
+                        break;
+                    }
+                    if (removeEgg)
+                    {
+                        eggs.Remove(egg);
+                    }
+                    removeEgg = false;
+                }
+                foreach (Foes3 foes3 in ufo3)
+                {
+                    if (foes3.foeHitbox3.IntersectsWith(egg.eggHitbox))
+                    {
+                        removeEgg = true;
+                        foes3.foes3vie--;
+                    }
+
+                    if (foes3.foes3vie < 1)
+                    {
+                        removeEgg = true;
+                        ufo3.Remove(foes3);
                         break;
                     }
                     if (removeEgg)
@@ -497,7 +541,7 @@ namespace ChickInvaders
                 }
             }
 
-            if (_nextRound == true)
+            if (_nextRound)
             {
                 ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Donny"));
                 ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Christ"));
