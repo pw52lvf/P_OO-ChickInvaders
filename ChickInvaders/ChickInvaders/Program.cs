@@ -26,6 +26,7 @@ namespace ChickInvaders
             List<Projectile2> projectiles2 = new List<Projectile2>();
             List<Explosion> explosions = new List<Explosion>();
             List<Missile> missiles = new List<Missile>();
+            List<Mothership> motherships = new List<Mothership>();
             coop.Add(new Chick(Land.WIDTH / 2, Land.HEIGHT / 2, "Chick"));
 
             ufo.Add(new Foes(1200, 0, "Sajad"));
@@ -43,7 +44,7 @@ namespace ChickInvaders
             //gameover.Add(new Perdu(400, 150));
 
             // Démarrage
-            Application.Run(new Land(coop, ufo, ufo2, projectiles, eggs, coeurs, beets, gameover, winners, ufo3, rounds, projectiles2, explosions, missiles));
+            Application.Run(new Land(coop, ufo, ufo2, projectiles, eggs, coeurs, beets, gameover, winners, ufo3, rounds, projectiles2, explosions, missiles, motherships));
         }
     }
 }

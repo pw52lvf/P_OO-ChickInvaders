@@ -31,6 +31,7 @@ namespace ChickInvaders
         private List<Projectile2> projectiles2;
         private List<Explosion> explosions;
         private List<Missile> missiles;
+        private List<Mothership> motherships;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -52,11 +53,12 @@ namespace ChickInvaders
         public bool canRestart;
         public bool chickwinner = false;
         public bool wexplosions;
+        public bool droppedMother;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
             List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds, List<Projectile2> projectiles2,
-            List<Explosion> explosions, List<Missile> missiles) : base()
+            List<Explosion> explosions, List<Missile> missiles, List<Mothership> motherships) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -83,6 +85,7 @@ namespace ChickInvaders
             this.projectiles2 = projectiles2;
             this.explosions = explosions;
             this.missiles = missiles;
+            this.motherships = motherships;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
@@ -160,6 +163,10 @@ namespace ChickInvaders
             foreach (Explosion explosion in explosions)
             {
                 explosion.Render(airspace);
+            }
+            foreach (Mothership mship in motherships)
+            {
+                mship.Render(airspace);
             }
             airspace.Render();
         }
@@ -365,6 +372,12 @@ namespace ChickInvaders
                         missiles.Remove(missile);
                     }
                 }
+                if ((ufo.Count == 0 || ufo2.Count == 0) && droppedMother != true)
+                {
+                    motherships.Add(new Mothership(560, 0));
+                    droppedMother = true;
+                    foreach (Mothership mship in motherships) ;
+                }
             }
             List<Projectile> projectilesToRemove = new List<Projectile>();
             foreach (Foes foes in ufo)
@@ -557,7 +570,7 @@ namespace ChickInvaders
                     if (chick.chickHitbox.IntersectsWith(coeur.coeurHitbox))
                     {
                         heartIsRemoved = true;
-                        if (chick.vie > 3)
+                        if (chick.vie < 3)
                         {
                             chick.vie++;
                         }
@@ -650,6 +663,31 @@ namespace ChickInvaders
                     break;
                 }
             }
+            foreach (Mothership mship in motherships)
+            {
+                mship.UpdateMother(interval);
+
+                switch (mship.waitingtime)
+                {
+                    case 2:
+                    case 10:
+                    case 20:
+                    case 30:
+                    case 40:
+                    case 50:
+                        ufo.Add(new Foes(mship.X, mship.Y, "Arthur"));
+                        Console.WriteLine("Ship dropped: Arthur");
+                        break;
+                    case 60:
+                    case 70:
+                    case 80:
+                    case 90:
+                    case 98:
+                        ufo2.Add(new Foes2(mship.X, mship.Y, "Arthur"));
+                        Console.WriteLine("Ship dropped: Arthur (UFO2)");
+                        break;
+                }
+            }
 
             if (_nextRound)
             {
@@ -657,6 +695,11 @@ namespace ChickInvaders
                 ufo3.Add(new Foes3(100, GlobalHelpers.alea.Next(0, 150), "Christ"));
                 ufo3.Add(new Foes3(200, GlobalHelpers.alea.Next(0, 150), "Jonny"));
                 //missiles.Add(new Missile(GlobalHelpers.alea.Next(200, 1000), GlobalHelpers.alea.Next(200, 400)));
+
+                foreach (Chick chick in coop)
+                {
+                    chick.vie = 3;
+                }
 
                 canRestart = true;
                 _nextRound = false;

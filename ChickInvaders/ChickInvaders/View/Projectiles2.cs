@@ -45,18 +45,18 @@ namespace ChickInvaders
         {
             if (pNum == 1)
             {
-                py = py + 10;
+                py = py + 8;
                 px = px - 3;
                 py++;
             }
             if (pNum == 2)
             {
-                py = py + 10;
+                py = py + 8;
                 py++;
             }
             if (pNum == 3)
             {
-                py = py + 10;
+                py = py + 8;
                 px = px + 3;
                 py++;
             }
