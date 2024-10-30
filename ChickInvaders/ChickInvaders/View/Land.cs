@@ -30,6 +30,7 @@ namespace ChickInvaders
         private List<Round2> rounds;
         private List<Projectile2> projectiles2;
         private List<Explosion> explosions;
+        private List<Missile> missiles;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -50,11 +51,12 @@ namespace ChickInvaders
         public bool chickIsFlipped = false;
         public bool canRestart;
         public bool chickwinner = false;
+        public bool wexplosions;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
             List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds, List<Projectile2> projectiles2,
-            List<Explosion> explosions) : base()
+            List<Explosion> explosions, List<Missile> missiles) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -79,11 +81,12 @@ namespace ChickInvaders
             this.ufo3 = ufo3;
             this.rounds = rounds;
             this.projectiles2 = projectiles2;
+            this.explosions = explosions;
+            this.missiles = missiles;
 
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
             SetBackgroundImage(imagePath);
-            this.explosions = explosions;
         }
 
         public void SetBackgroundImage(string filePath)
@@ -149,6 +152,10 @@ namespace ChickInvaders
             foreach (Projectile2 projectile2 in projectiles2)
             {
                 projectile2.Render(airspace);
+            }
+            foreach (Missile missile in missiles)
+            {
+                missile.Render(airspace);
             }
             foreach (Explosion explosion in explosions)
             {
@@ -327,6 +334,7 @@ namespace ChickInvaders
                 chick.Update(interval);
                 int randomB = GlobalHelpers.alea.Next(0, 200);
                 int randomC = GlobalHelpers.alea.Next(1, 500);
+                int randomD = GlobalHelpers.alea.Next(1, 500);
                 if (round2Finished == false)
                 {
                     if (randomB == 1)
@@ -349,6 +357,13 @@ namespace ChickInvaders
                 else
                 {
                     chick.chickImage = Image.FromFile(imagePath);
+                }
+                foreach (Missile missile in missiles)
+                {
+                    if (chick.chickHitbox.IntersectsWith(missile.mHitbox))
+                    {
+                        missiles.Remove(missile);
+                    }
                 }
             }
             List<Projectile> projectilesToRemove = new List<Projectile>();
@@ -402,7 +417,7 @@ namespace ChickInvaders
                     foes3.foeImage3 = Image.FromFile(imagePath);
                 }
 
-                int randomX = GlobalHelpers.alea.Next(1, 50);
+                int randomX = GlobalHelpers.alea.Next(1, 80);
                 if (randomX == 1)
                 {
                     projectiles2.Add(new Projectile2(foes3.X + 20, foes3.Y + 30, 1));
@@ -641,6 +656,7 @@ namespace ChickInvaders
                 ufo3.Add(new Foes3(0, GlobalHelpers.alea.Next(0, 150), "Donny"));
                 ufo3.Add(new Foes3(100, GlobalHelpers.alea.Next(0, 150), "Christ"));
                 ufo3.Add(new Foes3(200, GlobalHelpers.alea.Next(0, 150), "Jonny"));
+                //missiles.Add(new Missile(GlobalHelpers.alea.Next(200, 1000), GlobalHelpers.alea.Next(200, 400)));
 
                 canRestart = true;
                 _nextRound = false;
@@ -650,6 +666,15 @@ namespace ChickInvaders
                 winner.Add(new Winner(400, 150));
                 Console.WriteLine("Winner!!!");
                 chickwinner = true;
+                wexplosions = true;
+            }
+            if (wexplosions)
+            {
+                int randomX = GlobalHelpers.alea.Next(1, 3);
+                if (randomX == 1)
+                {
+                    explosions.Add(new Explosion(GlobalHelpers.alea.Next(1, 1200), GlobalHelpers.alea.Next(1, 600)));
+                }
             }
         }
 

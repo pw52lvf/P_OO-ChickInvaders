@@ -41,25 +41,25 @@ namespace ChickInvaders
         // que 'interval' millisecondes se sont écoulées
         public void UpdateEU(int interval)
         {
-            ey = ey - 8;
+            ey = ey - 10;
 
             UpdateHitbox();
         }
         public void UpdateED(int interval)
         {
-            ey = ey + 8;
+            ey = ey + 10;
 
             UpdateHitbox();
         }
         public void UpdateER(int interval)
         {
-            ex = ex + 8;
+            ex = ex + 15;
 
             UpdateHitbox();
         }
         public void UpdateEL(int interval)
         {
-            ex = ex - 8;
+            ex = ex - 15;
 
             UpdateHitbox();
         }
