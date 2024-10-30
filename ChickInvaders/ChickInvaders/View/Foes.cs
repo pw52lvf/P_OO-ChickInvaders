@@ -13,7 +13,7 @@ namespace ChickInvaders
         private int fx;                                 // Position en X depuis la gauche de l'espace aérien
         private int fy;
         private List<Image> images = new List<Image>();
-        private Image foeImage1;
+        public Image foeImage1;
         private int speedF;
         public Rectangle foeHitbox1 { get; private set; }
         private int foeWidth1;

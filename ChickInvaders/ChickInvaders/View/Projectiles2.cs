@@ -46,7 +46,7 @@ namespace ChickInvaders
             if (pNum == 1)
             {
                 py = py + 10;
-                px = px - 2;
+                px = px - 3;
                 py++;
             }
             if (pNum == 2)
@@ -57,7 +57,7 @@ namespace ChickInvaders
             if (pNum == 3)
             {
                 py = py + 10;
-                px = px + 2;
+                px = px + 3;
                 py++;
             }
 

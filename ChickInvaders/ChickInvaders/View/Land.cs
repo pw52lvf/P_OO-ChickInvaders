@@ -29,6 +29,7 @@ namespace ChickInvaders
         private List<Foes3> ufo3;
         private List<Round2> rounds;
         private List<Projectile2> projectiles2;
+        private List<Explosion> explosions;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
@@ -48,10 +49,12 @@ namespace ChickInvaders
         public bool eggLeft;
         public bool chickIsFlipped = false;
         public bool canRestart;
+        public bool chickwinner = false;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public Land(List<Chick> coop, List<Foes> ufo, List<Foes2> ufo2, List<Projectile> projectiles, List<Eggs> eggs, List<Coeur> coeurs,
-            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds, List<Projectile2> projectiles2) : base()
+            List<Beetle> beets, List<Perdu> gameover, List<Winner> winner, List<Foes3> ufo3, List<Round2> rounds, List<Projectile2> projectiles2,
+            List<Explosion> explosions) : base()
         {
             InitializeComponent();
             this.Size = new Size(WIDTH, HEIGHT);
@@ -80,6 +83,7 @@ namespace ChickInvaders
             string projectRoot = AppDomain.CurrentDomain.BaseDirectory;  // Chemin de sortie (bin/Debug)
             string imagePath = Path.Combine(projectRoot, @"..\..\..\Images\background.png");  // Remonter de 3 niveaux pour atteindre la racine du projet
             SetBackgroundImage(imagePath);
+            this.explosions = explosions;
         }
 
         public void SetBackgroundImage(string filePath)
@@ -145,6 +149,10 @@ namespace ChickInvaders
             foreach (Projectile2 projectile2 in projectiles2)
             {
                 projectile2.Render(airspace);
+            }
+            foreach (Explosion explosion in explosions)
+            {
+                explosion.Render(airspace);
             }
             airspace.Render();
         }
@@ -457,6 +465,7 @@ namespace ChickInvaders
                     {
                         removeEgg = true;
                         ufo.Remove(foes);
+                        explosions.Add(new Explosion(foes.X + 20, foes.Y + 20));
                         break;
                     }
                     if (removeEgg)
@@ -471,6 +480,7 @@ namespace ChickInvaders
                     {
                         removeEgg = true;
                         ufo2.Remove(foes2);
+                        explosions.Add(new Explosion(foes2.X + 20, foes2.Y + 20));
                         break;
                     }
                     if (removeEgg)
@@ -491,6 +501,7 @@ namespace ChickInvaders
                     {
                         removeEgg = true;
                         ufo3.Remove(foes3);
+                        explosions.Add(new Explosion(foes3.X + 20, foes3.Y + 20));
                         break;
                     }
                     if (removeEgg)
@@ -615,6 +626,15 @@ namespace ChickInvaders
             {
                 projectiles2.Remove(projectile2);
             }
+            foreach (Explosion explosion in explosions)
+            {
+                explosion.UpdateExplo(interval);
+                if (explosion.duree > 15)
+                {
+                    explosions.Remove(explosion);
+                    break;
+                }
+            }
 
             if (_nextRound)
             {
@@ -624,12 +644,12 @@ namespace ChickInvaders
 
                 canRestart = true;
                 _nextRound = false;
-
-                if (ufo3.Count == 0)
-                {
-                    winner.Add(new Winner(400, 150));
-                    Console.WriteLine("Winner!!!");
-                }
+            }
+            if (ufo3.Count < 1 && ufo.Count < 1 && ufo2.Count < 1 && rounds.Count < 1 && chickwinner == false)
+            {
+                winner.Add(new Winner(400, 150));
+                Console.WriteLine("Winner!!!");
+                chickwinner = true;
             }
         }
 
