@@ -10,9 +10,9 @@ namespace ChickInvaders
 {
     public partial class Foes
     {
-        // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
+            // Largeur et taille de l'image
             int imgWidth1 = foeImage1.Width;
             int imgHeight1 = foeImage1.Height;
 
@@ -24,15 +24,6 @@ namespace ChickInvaders
             int imgY = fy;
 
             drawingSpace.Graphics.DrawImage(foeImage1, new Rectangle(imgX, imgY, foeSize, foeHeight));
-            //drawingSpace.Graphics.DrawImage(foeImage2, new Rectangle(imgX, imgY, foeSize, foeHeight));
-            //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x + imgWidth / 2 + 5, _y - imgHeight / 2);
-            //drawingSpace.Graphics.DrawRectangle(Pens.Red, foeHitbox1);
         }
-
-        // De manière textuelle
-        //public override string ToString()
-        //{
-        //    return $"{Name} ({((int)((double)_charge / FULLCHARGE * 100)).ToString()}%)";
-        //}
     }
 }

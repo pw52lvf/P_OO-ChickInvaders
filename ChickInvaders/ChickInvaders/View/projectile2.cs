@@ -10,6 +10,7 @@ namespace ChickInvaders
     {
         public void Render(BufferedGraphics drawingSpace)
         {
+            // Largeur et taille de l'image
             int imgWidthProj = projImage2.Width;
             int imgHeightProj = projImage2.Height;
 
@@ -17,17 +18,10 @@ namespace ChickInvaders
             int projSize = 40;
             int projHeight = 40;
 
-
-            // Faire en sorte que ça soit centré
-            //int imgX = _x - foeSize / 2;
-            //int imgY = _y - foeHeight / 2;
-
             int imgX = px;
             int imgY = py;
 
             drawingSpace.Graphics.DrawImage(projImage2, new Rectangle(imgX, imgY, projSize, projHeight));
-            //drawingSpace.Graphics.DrawImage(foeImage2, new Rectangle(imgX, imgY, foeSize, foeHeight));
-            //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x + imgWidth / 2 + 5, _y - imgHeight / 2);
             //drawingSpace.Graphics.DrawRectangle(Pens.Red, projHitbox2);
         }
     }

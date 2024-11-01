@@ -9,17 +9,14 @@ namespace ChickInvaders
 {
     public partial class Foes2
     {
-        public static readonly int FULLCHARGE = 1000;   // Charge maximale de la batterie
-        private int _charge;                            // La charge actuelle de la batterie
-        private string _name;                           // Un nom
-        private int fx;                                 // Position en X depuis la gauche de l'espace aérien
-        private int fy;
-        private List<Image> images = new List<Image>();
-        private Image foeImage2;
-        private int speedF2;
-        public Rectangle foeHitbox2 { get; private set; }
-        private int foeWidth2;
-        private int foeHeight2;
+        private string _name;                                       // Nom de l'ufo
+        private int fx;                                             // Position en X depuis la gauche de l'espace aérien
+        private int fy;                                             // Position en Y depuis le haut de l'espace aérien
+        private Image foeImage2;                                    // Image de l'ufo                                                
+        private int speedF2;                                        // Vitesse de l'ufo
+        public Rectangle foeHitbox2 { get; private set; }           // Hitbox de l'ufo
+        private int foeWidth2;                                      // Largeur de l'image de l'ufo
+        private int foeHeight2;                                     // Taille de l'image de l'ufo
 
         // Constructeur
         public Foes2(int x, int y, string name)
@@ -27,8 +24,7 @@ namespace ChickInvaders
             fx = x;
             fy = y;
             _name = name;
-            speedF2 = GlobalHelpers.alea.Next(1, 8);
-            _charge = FULLCHARGE;
+            speedF2 = GlobalHelpers.alea.Next(1, 8);                // La vitesse de l'ufo est choisie aléatoirement à son apparition
             foeWidth2 = 55;
             foeHeight2 = 35;
 
@@ -40,13 +36,12 @@ namespace ChickInvaders
         public int Y { get { return fy; } }
         public string Name { get { return _name; } }
 
+        // Méthode qui met à jour la Hitbox selon l'emplacement de l'ufo
         private void UpdateHitbox()
         {
             foeHitbox2 = new Rectangle(fx + 20, fy + 35, foeWidth2, foeHeight2);
         }
 
-        // Cette méthode calcule le nouvel état dans lequel le drone se trouve après
-        // que 'interval' millisecondes se sont écoulées
         public void UpdateF2(int interval)
         {
             if (fx > 0)
