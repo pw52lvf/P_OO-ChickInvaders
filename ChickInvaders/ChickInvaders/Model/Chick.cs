@@ -2,10 +2,9 @@
 
 namespace ChickInvaders
 {
-    // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public partial class Chick
     {
-        public static readonly int vieMax = 3;          // Charge maximale de la batterie
+        public static readonly int vieMax = 3;          // Vie maximale du chick
         public int vie;                                // La charge actuelle de la batterie
         private string _name;                           // Un nom
         public int _x;                                 // Position en X depuis la gauche de l'espace aérien
