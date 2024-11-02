@@ -4,18 +4,18 @@ namespace ChickInvaders
 {
     public partial class Chick
     {
-        public static readonly int vieMax = 3;          // Vie maximale du chick
-        public int vie;                                // La charge actuelle de la batterie
-        private string _name;                           // Un nom
-        public int _x;                                 // Position en X depuis la gauche de l'espace aérien
-        public int _y;                                 // Position en Y depuis le haut de l'espace aérien
-        public Image chickImage;
-        private int _speedX = 0;
-        private int _speedY = 0;
-        public bool isFacingLeft;
-        public Rectangle chickHitbox { get; private set; }
-        private int chickWidth;
-        private int chickHeight;
+        public static readonly int vieMax = 3;              // Vie maximale de l'objet
+        public int vie;                                     // Vie actuelle de l'objet
+        private string _name;                               // Un nom
+        public int _x;                                      // Position en X depuis la gauche de l'espace aérien
+        public int _y;                                      // Position en Y depuis le haut de l'espace aérien
+        public Image chickImage;                            // Image de l'objet
+        private int _speedX = 0;                            // Vitesse de l'objet en vertical
+        private int _speedY = 0;                            // Vitesse de l'objet en horisontal
+        public bool isFacingLeft;                           // Pour savoir si l'objet regarde la droite ou la gauche
+        public Rectangle chickHitbox { get; private set; }  // Hitbox de l'objet
+        private int chickWidth;                             // Largeur de l'image de l'objet
+        private int chickHeight;                            // Hauteur de l'image de l'objet
 
         // Constructeur
         public Chick(int x, int y, string name)

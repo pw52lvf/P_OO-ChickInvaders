@@ -8,12 +8,11 @@ namespace ChickInvaders
 {
     public partial class Foes3
     {
-        public static readonly int FULLCHARGE = 4;   // Charge maximale de la batterie
-        public int foes3vie;                            // La charge actuelle de la batterie
-        private string _name;                           // Un nom
-        private int fx;                                 // Position en X depuis la gauche de l'espace aérien
+        public static readonly int FULLCHARGE = 4;          // Charge maximale de la batterie
+        public int foes3vie;                                // La charge actuelle de la batterie
+        private string _name;                               // Un nom
+        private int fx;                                     // Position en X depuis la gauche de l'espace aérien
         private int fy;
-        private List<Image> images = new List<Image>();
         public Image foeImage3;
         private int speedF;
         public Rectangle foeHitbox3 { get; private set; }

@@ -26,11 +26,5 @@ namespace ChickInvaders
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x + imgWidth / 2 + 5, _y - imgHeight / 2);
             //drawingSpace.Graphics.DrawRectangle(Pens.Red, foeHitbox1);
         }
-
-        // De manière textuelle
-        //public override string ToString()
-        //{
-        //    return $"{Name} ({((int)((double)_charge / FULLCHARGE * 100)).ToString()}%)";
-        //}
     }
 }
